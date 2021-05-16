@@ -1,0 +1,7 @@
+if var < 100 then
+   print var
+else if var > 100 then
+   print var
+   print "sakjdsak"
+else 
+   print 100
