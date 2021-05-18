@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 class Tag(Enum):
    '''
@@ -7,24 +7,47 @@ class Tag(Enum):
    '''
 
    # Fim de arquivo
-   EOF = -1
+   EOF = 'EOF'
 
    # Palavras-chave
-   KW_IF = 1
-   KW_ELSE = 2
-   KW_THEN = 3
-   KW_PRINT = 4
-
+   KW_PROGRAM =   'program'
+   KW_IF =        'if'
+   KW_ELSE =      'else'
+   KW_WHILE =     'while'
+   KW_WRITE =     'write'
+   KW_READ =      'read'
+   KW_NUM =       'num'
+   KW_CHAR =      'char'
+   KW_NOT =       'not'
+   KW_OR =        'or'
+   KW_AND =       'and'
+   
    # Operadores 
-   OP_MENOR = 10
-   OP_MENOR_IGUAL = 11
-   OP_MAIOR_IGUAL = 12
-   OP_MAIOR = 13
-   OP_IGUAL = 14
-   OP_DIFERENTE = 15
-    
+   OP_LE = '<='
+   OP_GE = '>='
+   OP_LT = '<'
+   OP_GT = '>'
+   OP_EQ = '=='
+   OP_NE = '!='
+   OP_AD = '+'
+   OP_MIN = '-'
+   OP_MUL = '*'
+   OP_DIV = '/'
+   OP_ATRIB = ':='
+   
+   # Simbolos
+   SMB_OBC = '{'
+   SMB_CBC = '}'
+   SMB_OPA = '('
+   SMB_CPA = ')'
+   SMB_COM = ','
+   SMB_SEM = ';'
+
    # Identificador
-   ID = 20
+   ID = auto()
 
    # Numeros
-   NUM = 30
+   NUM = auto()
+
+
+

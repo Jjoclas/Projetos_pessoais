@@ -11,11 +11,7 @@ class TS:
       a principio com linha e coluna em zero
       '''
       self.ts = {}
-
-      self.ts['if'] = Token(Tag.KW_IF, 'if', 0, 0)
-      self.ts['else'] = Token(Tag.KW_ELSE, 'else', 0, 0)
-      self.ts['then'] = Token(Tag.KW_THEN, 'then', 0, 0)
-      self.ts['print'] = Token(Tag.KW_PRINT, 'print', 0, 0)
+      self._add_kw()
 
    def getToken(self, lexema):
       token = self.ts.get(lexema)
@@ -27,3 +23,8 @@ class TS:
    def printTS(self):
       for k, t in (self.ts.items()):
          print(k, ":", t.toString())
+
+   def _add_kw(self):
+      for kw in Tag:
+         if kw.name.startswith('KW_'):
+            self.ts[kw.value] = Token(kw, kw.value, 0, 0)

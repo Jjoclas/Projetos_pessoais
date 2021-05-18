@@ -3,8 +3,8 @@ from lexer import Lexer
 
 if __name__ == "__main__":
    lexer = Lexer('prog1.txt')
-
-   lexer.analisa()
+   lexer.printTS()
+   # lexer.analisa()
    # print("\n=>Lista de tokens:")
    # token = lexer.proxToken()
    # while(token is not None and token.getNome() != Tag.EOF):
