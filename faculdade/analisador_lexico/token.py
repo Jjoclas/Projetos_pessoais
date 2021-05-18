@@ -27,4 +27,6 @@ class Token:
       self.coluna = coluna
 
    def toString(self):
-      return f"< {str(self.nome.name)}, \" {str(self.lexema)} \" Linha:{self.linha}, Coluna:{self.coluna}>"
+      str_token: str = f"< {str(self.nome.name)}, \" {str(self.lexema)} \"" 
+      str_token += ">" if self.linha == 0 else f" Linha:{self.linha}, Coluna:{self.coluna}>"
+      return str_token
