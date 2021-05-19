@@ -237,5 +237,5 @@ class Lexer():
             self._limpa_lexema()
             self.retornaPonteiro()
       # fim while    
-      self.printTokens()
+
       
