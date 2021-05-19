@@ -1,8 +1,9 @@
 import sys
+import logging
 
 from ts import TS
 from tag import Tag
-from token import Token
+from token_pasc import Token
 # from token_pasc import tokens
 from typing import Iterator, Optional, Callable, Generator, TextIO
 
@@ -31,6 +32,7 @@ class Lexer():
          self._simbolo: str = ''
          self._sep: tuple = (' ', '\t', '\n', '\r')
          self._estado: int = 1
+         self._qtd_erros: int = 0
          self.list_tokens: list = []
          self.lookahead = 0
          self._line_atual = 1
@@ -49,21 +51,26 @@ class Lexer():
          print('Erro ao fechar arquivo. Encerrando.')
          sys.exit(0)
 
-   def sinalizaErroLexico(self, message):
-      print("[Erro Lexico]: ", message, "\n");
+   def sinalizaErroLexico(self, message: str = 'Caractere invalido') -> str:
+      self._qtd_erros += 1
+      if self._qtd_erros > 0:
+         logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
+         raise SyntaxError
+      return f"[Erro Lexico]: {message} [ { self._simbolo} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"
 
    def retornaPonteiro(self):
-      # if self._simbolo != '':
-      #    self._input_file.seek(self._input_file.tell()-1)
-      #    print(self._input_file.read(1).decode('ascii'))
-      #    print(self._input_file.read(1).decode('ascii'))
-      #    print(self._input_file.read(1).decode('ascii'))
-      #    print(self._input_file.read(1).decode('ascii'))
-      #    print(self._input_file.read(1).decode('ascii'))
-      print('\n\n')
+      self._input_file.seek(self._input_file.tell()-1)
+
 
    def printTS(self):
       self.ts.printTS()
+
+   def printTokens(self):
+      for token in self.list_tokens:
+         try:
+            print(token.toString())
+         except:
+            print('[Erro Lexico]:', token)
 
    def _limpa_lexema(self):
       self._lexema = ''
@@ -96,13 +103,11 @@ class Lexer():
          self._simbolo:str = next(self._leitor)
          
          #EOF
-         # print(self._simbolo)
-         # print(self.list_tokens)
          if self._simbolo == '':
+         
             self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
             self._closeFile()
             break
-         # self._lexema += self._simbolo
          if self._estado == 1:
             
             list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
@@ -145,8 +150,11 @@ class Lexer():
                self._estado = 16
                continue
             
-            self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line_atual) + " e coluna " + str(self._column_atual))
+            if self._simbolo == '"':
+               self._estado = 17
+               continue
+            
+            self.list_tokens.append(self.sinalizaErroLexico())
             self._limpa_lexema()
             continue
 
@@ -156,8 +164,7 @@ class Lexer():
                self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
                continue
                
-            self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line_atual) + " e coluna " + str(self._column_atual))
+            self.list_tokens.append()
             continue
 
          if self._estado == 4:
@@ -166,8 +173,7 @@ class Lexer():
                self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
                continue
 
-            self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line_atual) + " e coluna " + str(self._column_atual))
+            self.list_tokens.append(self.sinalizaErroLexico())
             continue
          
          if self._estado == 16:
@@ -176,8 +182,18 @@ class Lexer():
                self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
                continue
 
-            self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line_atual) + " e coluna " + str(self._column_atual))
+            self.list_tokens.append(self.sinalizaErroLexico())
+            continue
+         
+         if self._estado == 17:
+            if self._simbolo == '"':
+               self._limpa_lexema()
+               self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
+               continue
+            self._lexema += self._simbolo
+            
+            if self._simbolo == '\n':
+               self.list_tokens.append(self.sinalizaErroLexico("Era esperado uma aspas dupla na linha"))
             continue
 
          if self._estado == 6:
@@ -213,13 +229,13 @@ class Lexer():
                self._lexema += self._simbolo
                continue
          
-            self.retornaPonteiro()
             if not self.ts.getToken(self._lexema):
                token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
                self.list_tokens.append(token)
                self.ts.addToken(self._lexema, token)
-               self._limpa_lexema()
-      # fim while    
-      for token in self.list_tokens:
-         print(token.toString())
 
+            self._limpa_lexema()
+            self.retornaPonteiro()
+      # fim while    
+      self.printTokens()
+      

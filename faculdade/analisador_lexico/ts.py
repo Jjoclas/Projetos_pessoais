@@ -1,5 +1,5 @@
 from tag import Tag
-from token import Token
+from token_pasc import Token
 
 class TS:
    '''

@@ -1,8 +1,8 @@
 var := 50
 if (var < 100){
-   read var
+   re1.ad var
 }
 else{ 
-   1 <= "ola"
+   1 <= ola
 }
    program 100
