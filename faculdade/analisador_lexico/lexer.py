@@ -33,8 +33,10 @@ class Lexer():
          self._estado: int = 1
          self.list_tokens: list = []
          self.lookahead = 0
-         self._line = 1
-         self._column = 0
+         self._line_atual = 1
+         self._column_atual = 0
+         self._line_lexer = 1
+         self._column_lexer = 0
          self.ts = TS()
       except IOError:
          print('Erro de abertura do arquivo. Encerrando.')
@@ -67,21 +69,25 @@ class Lexer():
       self._lexema = ''
       self._estado = 1
 
+   def _atualiza_linha_lexer(self):
+      self._line_lexer = self._line_atual
+      self._column_lexer = self._column_atual
+
    def _le_arquivo(self) -> Generator:
       while True:
          try:
             self._simbolo: str = self._input_file.read(1).decode('ascii')
             
             # Sinaliza coluna e linha
-            self._column += 1
+            self._column_atual += 1
             if self._simbolo == '\n':
-               self._line += 1
-               self._column = 0
+               self._line_atual += 1
+               self._column_atual = 0
             print(self._simbolo)
             yield self._simbolo.lower()
          
          except UnicodeDecodeError as e:
-            print(f'[Decode Error] Não foi possivel ler o caractere na posição linha {self._line}, coluna {self._column}')
+            print(f'[Decode Error] Não foi possivel ler o caractere na posição linha {self._line_atual}, coluna {self._column_atual}')
             raise
 
    def analisa(self):
@@ -93,13 +99,18 @@ class Lexer():
          # print(self._simbolo)
          # print(self.list_tokens)
          if self._simbolo == '':
-            self.list_tokens.append(Token(Tag.EOF, "EOF", self._line, self._column))
+            self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
             self._closeFile()
             break
-         
          # self._lexema += self._simbolo
          if self._estado == 1:
             
+            list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
+            if self._simbolo in list_simbolos:
+               self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
+               continue
+
+            self._atualiza_linha_lexer()
             if self._simbolo in self._sep:
                self._estado = 1
                continue
@@ -130,53 +141,63 @@ class Lexer():
                self._estado = 14
                continue
             
-            if self._simbolo == '/':
+            if self._simbolo == ':':
                self._estado = 16
                continue
             
             self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line) + " e coluna " + str(self._column))
+            str(self._line_atual) + " e coluna " + str(self._column_atual))
             self._limpa_lexema()
             continue
 
          if self._estado == 2:
             self._limpa_lexema()
             if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_IGUAL, "==", self._line, self._column))
+               self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
                continue
                
             self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line) + " e coluna " + str(self._column))
+            str(self._line_atual) + " e coluna " + str(self._column_atual))
             continue
 
          if self._estado == 4:
             self._limpa_lexema()
             if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_DIFERENTE, "!=", self._line, self._column))
+               self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
                continue
 
             self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
-            str(self._line) + " e coluna " + str(self._column))
+            str(self._line_atual) + " e coluna " + str(self._column_atual))
+            continue
+         
+         if self._estado == 16:
+            self._limpa_lexema()
+            if self._simbolo == '=':
+               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
+               continue
+
+            self.sinalizaErroLexico("Caractere invalido [" + self._simbolo + "] na linha " +
+            str(self._line_atual) + " e coluna " + str(self._column_atual))
             continue
 
          if self._estado == 6:
             self._limpa_lexema()
             if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_MENOR_IGUAL, "<=", self._line, self._column))
+               self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer))
                continue
 
             self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.OP_MENOR, "<", self._line, self._column))
+            self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer))
             continue
 
          if self._estado == 9:
             self._limpa_lexema()
             if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_MAIOR_IGUAL, ">=", self._line, self._column))
+               self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer))
                continue
 
             self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.OP_MAIOR, ">", self._line, self._column))
+            self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer))
             continue
          
          if self._estado == 12:
@@ -185,7 +206,7 @@ class Lexer():
                continue
             
             self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line, self._column))
+            self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
             self._limpa_lexema()
          if self._estado == 14:
             if self._simbolo.isalnum():
@@ -194,7 +215,7 @@ class Lexer():
          
             self.retornaPonteiro()
             if not self.ts.getToken(self._lexema):
-               token = Token(Tag.ID, self._lexema, self._line, self._column)
+               token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
                self.list_tokens.append(token)
                self.ts.addToken(self._lexema, token)
                self._limpa_lexema()
