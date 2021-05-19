@@ -53,9 +53,11 @@ class Lexer():
 
    def sinalizaErroLexico(self, message: str = 'Caractere invalido') -> str:
       self._qtd_erros += 1
-      if self._qtd_erros > 0:
+      
+      if self._qtd_erros > 3:
          logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
          raise SyntaxError
+      
       return f"[Erro Lexico]: {message} [ { self._simbolo} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"
 
    def retornaPonteiro(self):
@@ -90,7 +92,7 @@ class Lexer():
             if self._simbolo == '\n':
                self._line_atual += 1
                self._column_atual = 0
-            print(self._simbolo)
+
             yield self._simbolo.lower()
          
          except UnicodeDecodeError as e:
