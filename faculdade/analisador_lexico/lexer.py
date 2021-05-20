@@ -50,14 +50,18 @@ class Lexer():
          print('Erro ao fechar arquivo. Encerrando.')
          sys.exit(0)
 
-   def sinalizaErroLexico(self, message: str = 'Caractere invalido') -> str:
+   def _checa_modo_panico(self):
       self._qtd_erros += 1
       
       if self._qtd_erros > 3:
          logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
          raise SyntaxError
-      
-      return f"[Erro Lexico]: {message} [ { repr(self._simbolo)} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"
+
+   def sinalizaErroLexico(self, message: str = 'Caractere invalido') -> str:
+      self.list_tokens.append(f"""[Erro Lexico]: {message} [ { repr(self._simbolo)} ] 
+            na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"""
+      )
+      self._checa_modo_panico()
 
    def retornaPonteiro(self):
       self._input_file.seek(self._input_file.tell()-1)
@@ -94,10 +98,10 @@ class Lexer():
 
             yield self._simbolo.lower()
          
-         except UnicodeDecodeError as e:
-            print(f'[Decode Error] Não foi possivel ler o caractere na posição linha {self._line_atual}, coluna {self._column_atual}')
-            raise
-
+         except UnicodeDecodeError:
+            self.list_tokens.append(f'[Decode Error] Não foi possivel ler o caractere na posição linha {self._line_atual}, coluna {self._column_atual}')
+            self._checa_modo_panico()
+   
    def analisa(self):
       
       while True:
@@ -106,7 +110,6 @@ class Lexer():
             
             #EOF
             if self._simbolo == '':
-            
                self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
                self._closeFile()
                break
@@ -156,7 +159,12 @@ class Lexer():
                   self._estado = 17
                   continue
                
-               self.list_tokens.append(self.sinalizaErroLexico())
+               if self._simbolo == '/':
+                  self._lexema += self._simbolo
+                  self._estado = 18
+                  continue
+               
+               self.sinalizaErroLexico()
                self._limpa_lexema()
                continue
 
@@ -175,7 +183,7 @@ class Lexer():
                   self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
                   continue
 
-               self.list_tokens.append(self.sinalizaErroLexico())
+               self.sinalizaErroLexico()
                continue
             
             if self._estado == 16:
@@ -184,13 +192,13 @@ class Lexer():
                   self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
                   continue
 
-               self.list_tokens.append(self.sinalizaErroLexico())
+               self.sinalizaErroLexico()
                continue
             
             if self._estado == 17:
                if self._simbolo == '"':
                   if not self._lexema:
-                     self.list_tokens.append(self.sinalizaErroLexico("Strings vazias não são validas"))
+                     self.sinalizaErroLexico("Strings vazias não são validas")
                      continue
                   
                   self._limpa_lexema()
@@ -200,8 +208,31 @@ class Lexer():
                self._lexema += self._simbolo
                
                if self._simbolo == '\n':
-                  self.list_tokens.append(self.sinalizaErroLexico("Era esperado uma aspas dupla"))
+                  self.sinalizaErroLexico("Era esperado uma aspas dupla")
                continue
+            
+            #// Comentario em uma linha
+            if self._estado == 18:
+               self._lexema += self._simbolo
+               if self._lexema == '//':
+                  continue
+
+               if self._lexema == '/*':
+                  self._estado = 19
+                  continue
+               
+               if self._simbolo == '\n':
+                  self._limpa_lexema()
+                  continue   
+               
+               if not self._lexema.startswith('//'):
+                  self.sinalizaErroLexico()
+                  continue
+            
+            if self._estado == 19:
+               if self._lexema.endswith('*/'):
+                  self._limpa_lexema()
+                  continue
 
             if self._estado == 6:
                self._limpa_lexema()
@@ -231,15 +262,15 @@ class Lexer():
                self.retornaPonteiro()
                self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
                self._limpa_lexema()
+
             if self._estado == 14:
                if self._simbolo.isalnum():
                   self._lexema += self._simbolo
                   continue
             
-               if not self.ts.getToken(self._lexema):
-                  token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
-                  self.list_tokens.append(token)
-                  self.ts.addToken(self._lexema, token)
+               token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
+               self.list_tokens.append(token)
+               self.ts.addToken(self._lexema, token)
 
                self._limpa_lexema()
                self.retornaPonteiro()
