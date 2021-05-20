@@ -1,6 +1,6 @@
 var := 50
 if (var < 100){
-   re1.ad var
+   read ""
 }
 else{ 
    1 <= ola

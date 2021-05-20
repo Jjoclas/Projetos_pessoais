@@ -34,11 +34,10 @@ class Lexer():
          self._estado: int = 1
          self._qtd_erros: int = 0
          self.list_tokens: list = []
-         self.lookahead = 0
          self._line_atual = 1
-         self._column_atual = 0
+         self._column_atual = 1
          self._line_lexer = 1
-         self._column_lexer = 0
+         self._column_lexer = 1
          self.ts = TS()
       except IOError:
          print('Erro de abertura do arquivo. Encerrando.')
@@ -58,7 +57,7 @@ class Lexer():
          logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
          raise SyntaxError
       
-      return f"[Erro Lexico]: {message} [ { self._simbolo} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"
+      return f"[Erro Lexico]: {message} [ { repr(self._simbolo)} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"
 
    def retornaPonteiro(self):
       self._input_file.seek(self._input_file.tell()-1)
@@ -91,7 +90,7 @@ class Lexer():
             self._column_atual += 1
             if self._simbolo == '\n':
                self._line_atual += 1
-               self._column_atual = 0
+               self._column_atual = 1
 
             yield self._simbolo.lower()
          
@@ -102,142 +101,150 @@ class Lexer():
    def analisa(self):
       
       while True:
-         self._simbolo:str = next(self._leitor)
-         
-         #EOF
-         if self._simbolo == '':
-         
-            self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
-            self._closeFile()
-            break
-         if self._estado == 1:
+         try:
+            self._simbolo:str = next(self._leitor)
             
-            list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
-            if self._simbolo in list_simbolos:
-               self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
-               continue
-
-            self._atualiza_linha_lexer()
-            if self._simbolo in self._sep:
-               self._estado = 1
-               continue
+            #EOF
+            if self._simbolo == '':
             
-            if self._simbolo == '=':
-               self._estado = 2
-               continue
-
-            if self._simbolo == '!':
-               self._estado = 4
-               continue
-            
-            if self._simbolo == '<':
-               self._estado = 6
-               continue
-            
-            if self._simbolo == '>':
-               self._estado = 9
-               continue
-
-            if self._simbolo.isdigit():
-               self._lexema += self._simbolo
-               self._estado = 12
-               continue
-            
-            if self._simbolo.isalpha():
-               self._lexema += self._simbolo
-               self._estado = 14
-               continue
-            
-            if self._simbolo == ':':
-               self._estado = 16
-               continue
-            
-            if self._simbolo == '"':
-               self._estado = 17
-               continue
-            
-            self.list_tokens.append(self.sinalizaErroLexico())
-            self._limpa_lexema()
-            continue
-
-         if self._estado == 2:
-            self._limpa_lexema()
-            if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
-               continue
+               self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
+               self._closeFile()
+               break
+            if self._estado == 1:
                
-            self.list_tokens.append()
-            continue
+               list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
+               if self._simbolo in list_simbolos:
+                  self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
+                  continue
 
-         if self._estado == 4:
-            self._limpa_lexema()
-            if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
-               continue
+               self._atualiza_linha_lexer()
+               if self._simbolo in self._sep:
+                  self._estado = 1
+                  continue
+               
+               if self._simbolo == '=':
+                  self._estado = 2
+                  continue
 
-            self.list_tokens.append(self.sinalizaErroLexico())
-            continue
-         
-         if self._estado == 16:
-            self._limpa_lexema()
-            if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
-               continue
+               if self._simbolo == '!':
+                  self._estado = 4
+                  continue
+               
+               if self._simbolo == '<':
+                  self._estado = 6
+                  continue
+               
+               if self._simbolo == '>':
+                  self._estado = 9
+                  continue
 
-            self.list_tokens.append(self.sinalizaErroLexico())
-            continue
-         
-         if self._estado == 17:
-            if self._simbolo == '"':
+               if self._simbolo.isdigit():
+                  self._lexema += self._simbolo
+                  self._estado = 12
+                  continue
+               
+               if self._simbolo.isalpha():
+                  self._lexema += self._simbolo
+                  self._estado = 14
+                  continue
+               
+               if self._simbolo == ':':
+                  self._estado = 16
+                  continue
+               
+               if self._simbolo == '"':
+                  self._estado = 17
+                  continue
+               
+               self.list_tokens.append(self.sinalizaErroLexico())
                self._limpa_lexema()
-               self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
-               continue
-            self._lexema += self._simbolo
-            
-            if self._simbolo == '\n':
-               self.list_tokens.append(self.sinalizaErroLexico("Era esperado uma aspas dupla na linha"))
-            continue
-
-         if self._estado == 6:
-            self._limpa_lexema()
-            if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer))
                continue
 
-            self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer))
-            continue
-
-         if self._estado == 9:
-            self._limpa_lexema()
-            if self._simbolo == '=':
-               self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer))
+            if self._estado == 2:
+               self._limpa_lexema()
+               if self._simbolo == '=':
+                  self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
+                  continue
+                  
+               self.list_tokens.append()
                continue
 
-            self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer))
-            continue
-         
-         if self._estado == 12:
-            if self._simbolo.isdigit():
-               self._lexema += self._simbolo           
+            if self._estado == 4:
+               self._limpa_lexema()
+               if self._simbolo == '=':
+                  self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
+                  continue
+
+               self.list_tokens.append(self.sinalizaErroLexico())
                continue
             
-            self.retornaPonteiro()
-            self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
-            self._limpa_lexema()
-         if self._estado == 14:
-            if self._simbolo.isalnum():
+            if self._estado == 16:
+               self._limpa_lexema()
+               if self._simbolo == '=':
+                  self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
+                  continue
+
+               self.list_tokens.append(self.sinalizaErroLexico())
+               continue
+            
+            if self._estado == 17:
+               if self._simbolo == '"':
+                  if not self._lexema:
+                     self.list_tokens.append(self.sinalizaErroLexico("Strings vazias não são validas"))
+                     continue
+                  
+                  self._limpa_lexema()
+                  self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
+                  continue
+               
                self._lexema += self._simbolo
+               
+               if self._simbolo == '\n':
+                  self.list_tokens.append(self.sinalizaErroLexico("Era esperado uma aspas dupla"))
                continue
-         
-            if not self.ts.getToken(self._lexema):
-               token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
-               self.list_tokens.append(token)
-               self.ts.addToken(self._lexema, token)
 
-            self._limpa_lexema()
-            self.retornaPonteiro()
+            if self._estado == 6:
+               self._limpa_lexema()
+               if self._simbolo == '=':
+                  self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer))
+                  continue
+
+               self.retornaPonteiro()
+               self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer))
+               continue
+
+            if self._estado == 9:
+               self._limpa_lexema()
+               if self._simbolo == '=':
+                  self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer))
+                  continue
+
+               self.retornaPonteiro()
+               self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer))
+               continue
+            
+            if self._estado == 12:
+               if self._simbolo.isdigit():
+                  self._lexema += self._simbolo           
+                  continue
+               
+               self.retornaPonteiro()
+               self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
+               self._limpa_lexema()
+            if self._estado == 14:
+               if self._simbolo.isalnum():
+                  self._lexema += self._simbolo
+                  continue
+            
+               if not self.ts.getToken(self._lexema):
+                  token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(token)
+                  self.ts.addToken(self._lexema, token)
+
+               self._limpa_lexema()
+               self.retornaPonteiro()
+         except SyntaxError:
+            break
       # fim while    
 
       
