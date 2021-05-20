@@ -53,13 +53,13 @@ class Lexer():
    def _checa_modo_panico(self):
       self._qtd_erros += 1
       
-      if self._qtd_erros > 3:
+      if self._qtd_erros > 2:
          logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
          raise SyntaxError
 
    def sinalizaErroLexico(self, message: str = 'Caractere invalido') -> str:
-      self.list_tokens.append(f"""[Erro Lexico]: {message} [ { repr(self._simbolo)} ] 
-            na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"""
+      self._simbolo = self._simbolo if self._simbolo else 'EOF'
+      self.list_tokens.append(f"""[Erro Lexico]: {message} [ { repr(self._simbolo )} ] na linha { str(self._line_atual)} e coluna {str(self._column_atual)}"""
       )
       self._checa_modo_panico()
 
@@ -108,11 +108,7 @@ class Lexer():
          try:
             self._simbolo:str = next(self._leitor)
             
-            #EOF
-            if self._simbolo == '':
-               self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
-               self._closeFile()
-               break
+            
             if self._estado == 1:
                
                list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
@@ -163,6 +159,12 @@ class Lexer():
                   self._lexema += self._simbolo
                   self._estado = 18
                   continue
+               
+               #EOF
+               if self._simbolo == '':
+                  self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
+                  self._closeFile()
+                  break
                
                self.sinalizaErroLexico()
                self._limpa_lexema()
@@ -216,7 +218,7 @@ class Lexer():
                self._lexema += self._simbolo
                if self._lexema == '//':
                   continue
-
+               
                if self._lexema == '/*':
                   self._estado = 19
                   continue
@@ -230,9 +232,17 @@ class Lexer():
                   continue
             
             if self._estado == 19:
+               self._lexema += self._simbolo
                if self._lexema.endswith('*/'):
+                  print('limpour')
                   self._limpa_lexema()
                   continue
+               
+               # print(self._lexema)
+               # print(self._lexema)
+               if self._simbolo == '':
+                  print('vazio')
+                  self.sinalizaErroLexico('Esperado "*/"')
 
             if self._estado == 6:
                self._limpa_lexema()
@@ -274,6 +284,7 @@ class Lexer():
 
                self._limpa_lexema()
                self.retornaPonteiro()
+            
          except SyntaxError:
             break
       # fim while    
