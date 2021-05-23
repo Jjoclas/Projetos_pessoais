@@ -94,7 +94,7 @@ class Lexer():
             self._column_atual += 1
             if self._simbolo == '\n':
                self._line_atual += 1
-               self._column_atual = 1
+               self._column_atual = 0
 
             yield self._simbolo.lower()
          
@@ -203,8 +203,8 @@ class Lexer():
                      self.sinalizaErroLexico("Strings vazias não são validas")
                      continue
                   
-                  self._limpa_lexema()
                   self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
+                  self._limpa_lexema()
                   continue
                
                self._lexema += self._simbolo
@@ -234,12 +234,10 @@ class Lexer():
             if self._estado == 19:
                self._lexema += self._simbolo
                if self._lexema.endswith('*/'):
-                  print('limpour')
                   self._limpa_lexema()
                   continue
                
                if self._simbolo == '':
-                  print('vazio')
                   self.sinalizaErroLexico('Esperado "*/"')
 
             if self._estado == 6:
@@ -279,8 +277,7 @@ class Lexer():
                token = self.ts.getToken(self._lexema)
                
                if token:
-                  token.linha = self._line_lexer
-                  token.coluna = self._column_lexer
+                  token = Token(token.nome, token.lexema, self._line_lexer, self._column_lexer)
                else:
                   token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
                
