@@ -238,8 +238,6 @@ class Lexer():
                   self._limpa_lexema()
                   continue
                
-               # print(self._lexema)
-               # print(self._lexema)
                if self._simbolo == '':
                   print('vazio')
                   self.sinalizaErroLexico('Esperado "*/"')
@@ -277,8 +275,15 @@ class Lexer():
                if self._simbolo.isalnum():
                   self._lexema += self._simbolo
                   continue
-            
-               token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
+
+               token = self.ts.getToken(self._lexema)
+               
+               if token:
+                  token.linha = self._line_lexer
+                  token.coluna = self._column_lexer
+               else:
+                  token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
+               
                self.list_tokens.append(token)
                self.ts.addToken(self._lexema, token)
 
