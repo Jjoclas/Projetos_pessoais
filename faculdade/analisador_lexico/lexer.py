@@ -110,13 +110,16 @@ class Lexer():
             
             
             if self._estado == 1:
+               self._atualiza_linha_lexer()
                
                list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
-               if self._simbolo in list_simbolos:
+               list_operadores: list = [ smb.value for smb in self.ts.get_OP()]
+               list_tokens: list = list_operadores + list_simbolos
+               
+               if self._simbolo in list_tokens and self._simbolo not in ('/', '<'):
                   self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
                   continue
 
-               self._atualiza_linha_lexer()
                if self._simbolo in self._sep:
                   self._estado = 1
                   continue
@@ -155,6 +158,7 @@ class Lexer():
                   self._estado = 17
                   continue
                
+               
                if self._simbolo == '/':
                   self._lexema += self._simbolo
                   self._estado = 18
@@ -176,7 +180,7 @@ class Lexer():
                   self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
                   continue
                   
-               self.list_tokens.append()
+               self.sinalizaErroLexico()
                continue
 
             if self._estado == 4:
@@ -213,8 +217,12 @@ class Lexer():
                   self.sinalizaErroLexico("Era esperado uma aspas dupla")
                continue
             
-            #// Comentario em uma linha
             if self._estado == 18:
+               if self._simbolo not in ['/', '*']:
+                  self.list_tokens.append(Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer))
+                  self._limpa_lexema()
+                  continue
+
                self._lexema += self._simbolo
                if self._lexema == '//':
                   continue
@@ -226,7 +234,8 @@ class Lexer():
                if self._simbolo == '\n':
                   self._limpa_lexema()
                   continue   
-               
+
+
                if not self._lexema.startswith('//'):
                   self.sinalizaErroLexico()
                   continue
