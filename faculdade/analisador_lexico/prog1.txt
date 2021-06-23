@@ -5,8 +5,8 @@ if (var < 100){
 else{ 
    1 <= ola
    1/2
-   1-2
+   11.3-2
    1+2
-   1*2
+   1*2.2
 }
    program 100 /* teste //ksdjfklasdjf */ 

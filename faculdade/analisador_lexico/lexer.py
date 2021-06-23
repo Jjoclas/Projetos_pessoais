@@ -273,6 +273,10 @@ class Lexer():
                if self._simbolo.isdigit():
                   self._lexema += self._simbolo           
                   continue
+
+               if self._simbolo == '.' and '.' not in self._lexema:
+                  self._lexema += self._simbolo           
+                  continue
                
                self.retornaPonteiro()
                self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
