@@ -150,10 +150,7 @@ class Lexer():
                   self._estado = 14
                   continue
                
-               if self._simbolo == ':':
-                  self._estado = 16
-                  continue
-               
+
                if self._simbolo == '"':
                   self._estado = 17
                   continue
@@ -179,9 +176,10 @@ class Lexer():
                if self._simbolo == '=':
                   self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
                   continue
-                  
-               self.sinalizaErroLexico()
+               
+               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
                continue
+                  
 
             if self._estado == 4:
                self._limpa_lexema()
@@ -192,14 +190,6 @@ class Lexer():
                self.sinalizaErroLexico()
                continue
             
-            if self._estado == 16:
-               self._limpa_lexema()
-               if self._simbolo == '=':
-                  self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
-                  continue
-
-               self.sinalizaErroLexico()
-               continue
             
             if self._estado == 17:
                if self._simbolo == '"':

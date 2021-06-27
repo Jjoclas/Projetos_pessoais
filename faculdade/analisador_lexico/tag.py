@@ -33,7 +33,7 @@ class Tag(Enum):
    OP_MIN = '-'
    OP_MUL = '*'
    OP_DIV = '/'
-   OP_ATRIB = ':='
+   OP_ATRIB = '='
    
    # Simbolos
    SMB_OBC = '{'
