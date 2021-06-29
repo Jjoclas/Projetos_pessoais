@@ -102,8 +102,12 @@ class Lexer():
             self.list_tokens.append(f'[Decode Error] Não foi possivel ler o caractere na posição linha {self._line_atual}, coluna {self._column_atual}')
             self._checa_modo_panico()
    
-   def analisa(self):
-      
+   def analisa_sintax(self):
+      from collections import deque
+      _gen = self.le_lexer()
+      deque(_gen, maxlen=0)
+
+   def le_lexer(self):
       while True:
          try:
             self._simbolo:str = next(self._leitor)
@@ -118,6 +122,7 @@ class Lexer():
                
                if self._simbolo in list_tokens and self._simbolo not in ('/', '<'):
                   self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
+                  yield Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual)
                   continue
 
                if self._simbolo in self._sep:
@@ -164,6 +169,7 @@ class Lexer():
                #EOF
                if self._simbolo == '':
                   self.list_tokens.append(Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual))
+                  yield Token(Tag.EOF, Tag.EOF.value, self._line_atual, self._column_atual)
                   self._closeFile()
                   break
                
@@ -175,9 +181,11 @@ class Lexer():
                self._limpa_lexema()
                if self._simbolo == '=':
                   self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
+                  yield Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer)
                   continue
-               
-               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
+
+               yield Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer)
+               self.retornaPonteiro()
                continue
                   
 
@@ -185,6 +193,7 @@ class Lexer():
                self._limpa_lexema()
                if self._simbolo == '=':
                   self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
+                  yield Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer)
                   continue
 
                self.sinalizaErroLexico()
@@ -199,6 +208,7 @@ class Lexer():
                   
                   self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
                   self._limpa_lexema()
+                  yield Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer)
                   continue
                
                self._lexema += self._simbolo
@@ -211,6 +221,7 @@ class Lexer():
                if self._simbolo not in ['/', '*']:
                   self.list_tokens.append(Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer))
                   self._limpa_lexema()
+                  yield Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer)
                   continue
 
                self._lexema += self._simbolo
@@ -243,20 +254,24 @@ class Lexer():
                self._limpa_lexema()
                if self._simbolo == '=':
                   self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer))
+                  yield Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer)
                   continue
 
                self.retornaPonteiro()
                self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer))
+               yield Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer)
                continue
 
             if self._estado == 9:
                self._limpa_lexema()
                if self._simbolo == '=':
                   self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer))
+                  yield Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer)
                   continue
 
                self.retornaPonteiro()
                self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer))
+               yield Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer)
                continue
             
             if self._estado == 12:
@@ -270,6 +285,7 @@ class Lexer():
                
                self.retornaPonteiro()
                self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
+               yield Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer)
                self._limpa_lexema()
 
             if self._estado == 14:
@@ -285,11 +301,11 @@ class Lexer():
                   token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
                
                self.list_tokens.append(token)
+               yield token
                self.ts.addToken(self._lexema, token)
 
                self._limpa_lexema()
-               self.retornaPonteiro()
-            
+               self.retornaPonteiro()            
          except SyntaxError:
             break
       # fim while    

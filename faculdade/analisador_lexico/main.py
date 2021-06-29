@@ -5,7 +5,7 @@ if __name__ == "__main__":
    #Lê arquivo
    lexer = Lexer('prog1.txt')
    #Realiza analise léxica
-   lexer.analisa()
+   lexer.analisa_sintax()
    
    print("\n=>Lista de tokens:")
    lexer.printTokens()
