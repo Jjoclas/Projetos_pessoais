@@ -206,9 +206,9 @@ class Lexer():
                      self.sinalizaErroLexico("Strings vazias não são validas")
                      continue
                   
-                  self.list_tokens.append(Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer))
+                  self.list_tokens.append(Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer))
                   self._limpa_lexema()
-                  yield Token(Tag.KW_CHAR, self._lexema, self._line_lexer, self._column_lexer)
+                  yield Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer)
                   continue
                
                self._lexema += self._simbolo

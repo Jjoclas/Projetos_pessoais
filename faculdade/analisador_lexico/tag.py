@@ -48,6 +48,8 @@ class Tag(Enum):
 
    # Numeros
    NUM = auto()
+   # Strings
+   CHAR = auto()
 
    # Constantes para tipos
    TIPO_VOID = auto()
