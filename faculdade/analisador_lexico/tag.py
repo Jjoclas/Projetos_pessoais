@@ -49,5 +49,12 @@ class Tag(Enum):
    # Numeros
    NUM = auto()
 
+   # Constantes para tipos
+   TIPO_VOID = auto()
+   TIPO_BOOL = auto()
+   TIPO_NUM =  auto()
+   TIPO_CHAR = auto()
+   TIPO_ERRO = auto()
+
 
 
