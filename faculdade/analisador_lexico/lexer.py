@@ -120,7 +120,7 @@ class Lexer():
                list_operadores: list = [ smb.value for smb in self.ts.get_OP()]
                list_tokens: list = list_operadores + list_simbolos
                
-               if self._simbolo in list_tokens and self._simbolo not in ('/', '<'):
+               if self._simbolo in list_tokens and self._simbolo not in ('/', '<', '='):
                   self.list_tokens.append(Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual))
                   yield Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual)
                   continue
@@ -184,6 +184,7 @@ class Lexer():
                   yield Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer)
                   continue
 
+               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
                yield Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer)
                self.retornaPonteiro()
                continue

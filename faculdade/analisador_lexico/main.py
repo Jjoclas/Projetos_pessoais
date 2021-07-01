@@ -7,13 +7,12 @@ if __name__ == "__main__":
    lexer = Lexer('test.txt')
    parser = Parser(lexer)
    parser.le_pilha()
-   #Realiza analise léxica
-   # lexer.analisa_sintax()
-   
-   # print("\n=>Lista de tokens:")
-   # lexer.printTokens()
 
-   # print("\n=>Tabela de simbolos:")
-   # lexer.printTS()
+   # lexer.analisa_sintax()
+   print("\n=>Lista de tokens:")
+   lexer.printTokens()
+
+   print("\n=>Tabela de simbolos:")
+   lexer.printTS()
    
-   # print('\n=> Fim da compilacao')
+   print('\n=> Fim da compilacao')

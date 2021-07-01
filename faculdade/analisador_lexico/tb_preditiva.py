@@ -23,7 +23,7 @@ class Tb_rule(Enum):
 
     expression =    [['simple_expr', 'expression_']] # 26
     expression_ =   [['logop', 'simple_expr', 'expression_'], []] # 27, 28
-    simple_expr =   [['term', 'simple_expr_']] # 29
+    simple_expr =   [('term', 'simple_expr_')] # 29
     simple_expr_ =  [['relop', 'term', 'simple_expr_'], []] # 30, 31
     term =          [['factor_b', 'term_']] # 32
     term_ =         [['addop', 'factor_b', 'term_'], []] # 33, 34
