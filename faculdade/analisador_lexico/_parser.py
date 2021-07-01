@@ -29,7 +29,7 @@ class Parser():
 
 		self._qtd_erros_sintatico += 1
 		if self._qtd_erros_sintatico > 0:
-			logging.critical('Limite máximo de erros lexicos suportados foi atingido.')
+			logging.critical('Limite máximo de erros sintaticos suportados foi atingido.')
 			raise RuntimeError	
 
 
