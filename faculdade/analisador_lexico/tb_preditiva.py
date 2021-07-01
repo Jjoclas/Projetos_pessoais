@@ -13,7 +13,7 @@ class Tb_rule(Enum):
 
     stmt_list =     [['stmt', Tag.SMB_SEM, 'stmt_list'], []] # 11, 12
     stmt =          [['assign_stmt'], ['if_stmt'], ['while_stmt'], ['read_stmt'], ['write_stmt']] # 13, 14, 15, 16, 17
-    assign_stmt =   [[Tag.ID, Tag.OP_EQ, 'simple_expr']] # 18
+    assign_stmt =   [[Tag.ID, Tag.OP_ATRIB, 'simple_expr']] # 18
     if_stmt =       [[Tag.KW_IF, Tag.SMB_OPA, 'expression', Tag.SMB_CPA, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC, 'if_stmt_' ]] # 19
     if_stmt_ =      [[Tag.KW_ELSE, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC ], []] # 20, 21
     while_stmt =    [['stmt_prefix', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]] # 22
@@ -36,7 +36,7 @@ class Tb_rule(Enum):
     relop =         [[Tag.OP_EQ], [Tag.OP_GT], [Tag.OP_GE], [Tag.OP_LT], [Tag.OP_LE], [Tag.OP_NE]] # 45, 46, 47, 48, 49, 50
     addop =         [[Tag.OP_AD], [Tag.OP_MIN]] # 51, 52
     mulop =         [[Tag.OP_MUL], [Tag.OP_DIV]] # 53, 54
-    constant =      [[Tag.KW_NUM], [Tag.KW_CHAR]] # 55, 56
+    constant =      [[Tag.NUM], [Tag.CHAR]] # 55, 56
 
 TB={
     ('prog', Tag.KW_PROGRAM):       Tb_rule.prog.value[0], # 1
@@ -52,7 +52,7 @@ TB={
     ('decl', Tag.KW_NUM):           Tb_rule.decl.value[0],
     ('decl', Tag.KW_CHAR):          Tb_rule.decl.value[0],
     
-    ('_type', Tag.KW_CHAR):         Tb_rule._type.value[0],
+    ('_type', Tag.KW_NUM):          Tb_rule._type.value[0],
     ('_type', Tag.KW_CHAR):         Tb_rule._type.value[1],
     
     ('id_list', Tag.ID):            Tb_rule.id_list.value[0],
@@ -154,9 +154,8 @@ TB={
     ('factor_a', Tag.KW_NOT):       Tb_rule.factor_a.value[1],
 
     ('factor', Tag.ID):             Tb_rule.factor.value[0],
-    ('factor', Tag.KW_AND):         Tb_rule.factor.value[0],
-    ('factor', Tag.KW_OR):          Tb_rule.factor.value[0],
-    ('factor', Tag.KW_NOT):         Tb_rule.factor.value[1],
+    ('factor', Tag.NUM):            Tb_rule.factor.value[1],
+    ('factor', Tag.CHAR):           Tb_rule.factor.value[1],
     ('factor', Tag.SMB_OPA):        Tb_rule.factor.value[2],
 
     ('logop', Tag.KW_OR):           Tb_rule.logop.value[0],

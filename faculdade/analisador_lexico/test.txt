@@ -1,3 +1,3 @@
 program prog {
-    var = 1
+    var = 1;
 }

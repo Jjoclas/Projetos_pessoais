@@ -12,7 +12,7 @@ class Parser():
 		self.pilha: list = [Tag.EOF, 'prog'] #Pilha inciada com simbolo incial e EOF
 		self.TB: dict = TB
 		self._qtd_erros_sintatico: int = 0
-		print('pilha incial', self.pilha)
+		
 		if self.token is None: # erro no Lexer
 			sys.exit(0)
 
@@ -47,7 +47,7 @@ class Parser():
 
 
 	def isToken(self, simbolo):
-		print(simbolo)
+		# print('ISTOKEN', simbolo, '\n\n')
 		if isinstance(simbolo, str):
 			return False
 		
@@ -66,18 +66,20 @@ class Parser():
 	def le_pilha(self):
 		while self.pilha:
 			simbolo = self.pilha[-1]
-			print('\npilha',self.pilha)
+			# print('\npilha',self.pilha)
+			# print('TOKEN', self.token.tag , '\n\n')
 
 			if self.isToken(simbolo):
 				if simbolo == self.token.tag:
 					self.desempilha()
 					self.advance()
 					continue
-				
+				# print('ISTOKEN ERROR')
 				self.sinalizaErroSintatico('message')			
 			else:
-				print('TOKEN', self.token.tag )
-				if TB[simbolo, self.token.tag]:
+				# print('TOKEN', self.token.tag )
+				# print(f'\nTB\nToken: {self.token.tag}\nSimbolo: {simbolo}\n', TB[simbolo, self.token.tag])
+				if TB.get((simbolo, self.token.tag), 'N\A') != 'N\A':
 					self.empilha(TB[simbolo, self.token.tag])
 					continue
 				
