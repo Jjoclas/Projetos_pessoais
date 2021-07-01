@@ -296,7 +296,7 @@ class Lexer():
                token = self.ts.getToken(self._lexema)
                
                if token:
-                  token = Token(token.nome, token.lexema, self._line_lexer, self._column_lexer)
+                  token = Token(token.tag, token.lexema, self._line_lexer, self._column_lexer)
                else:
                   token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
                

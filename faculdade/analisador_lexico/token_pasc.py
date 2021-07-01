@@ -3,8 +3,9 @@ class Token:
    '''
    Classe que representa um token
    '''
-   def __init__(self, nome, lexema, linha, coluna, tipo=Tag.TIPO_VOID):
-      self.nome = nome
+   def __init__(self, tag, lexema, linha, coluna, tipo=Tag.TIPO_VOID):
+      self.nome = tag.name
+      self.tag = tag
       self.lexema = lexema
       self.linha = linha
       self.coluna = coluna
@@ -30,6 +31,6 @@ class Token:
 
 
    def toString(self):
-      str_token: str = f"< {str(self.nome.name)}, {repr(self.lexema)}, Tipo: {str(self.tipo)}" 
+      str_token: str = f"< {str(self.nome)}, {repr(self.lexema)}, Tipo: {str(self.tipo)}" 
       str_token += ">" if self.linha == 0 else f" Linha:{self.linha}, Coluna:{self.coluna}>"
       return str_token

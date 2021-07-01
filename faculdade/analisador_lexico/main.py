@@ -6,7 +6,7 @@ if __name__ == "__main__":
    #Lê arquivo
    lexer = Lexer('test.txt')
    parser = Parser(lexer)
-   parser.advance()
+   parser.le_pilha()
    #Realiza analise léxica
    # lexer.analisa_sintax()
    

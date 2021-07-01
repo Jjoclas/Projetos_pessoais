@@ -4,10 +4,10 @@ from enum import Enum
 
 class Tb_rule(Enum):
     prog =          [[Tag.KW_PROGRAM, Tag.ID, 'body' ]]
-    body =          [['decl-list', Tag.SMB_OBC, 'stmt-list', Tag.SMB_CBC]]
-    decl_list =     [['decl', Tag.SMB_SEM, 'decl-list'], []]
-    decl =          [['type', Tag.SMB_SEM, 'decl-list'], []]
-    type =          [[Tag.KW_NUM], [Tag.KW_CHAR]]
+    body =          [['decl_list', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]]
+    decl_list =     [['decl', Tag.SMB_SEM, 'decl_list'], []]
+    decl =          [['_type', Tag.SMB_SEM, 'decl_list'], []]
+    _type =         [[Tag.KW_NUM], [Tag.KW_CHAR]]
     id_list =       [[Tag.ID, 'id_list_']]
     id_list_ =      [[Tag.SMB_COM, 'id_list'], []]
 
@@ -45,15 +45,15 @@ TB={
     ('body', Tag.KW_NUM):           Tb_rule.body.value[0],
     ('body', Tag.KW_CHAR):          Tb_rule.body.value[0],
     
-    ('decl-list', Tag.SMB_OBC):     Tb_rule.decl_list.value[0],
-    ('decl-list', Tag.KW_NUM):      Tb_rule.decl_list.value[1],
-    ('decl-list', Tag.KW_CHAR):     Tb_rule.decl_list.value[1],
+    ('decl_list', Tag.SMB_OBC):     Tb_rule.decl_list.value[0],
+    ('decl_list', Tag.KW_NUM):      Tb_rule.decl_list.value[1],
+    ('decl_list', Tag.KW_CHAR):     Tb_rule.decl_list.value[1],
     
     ('decl', Tag.KW_NUM):           Tb_rule.decl.value[0],
     ('decl', Tag.KW_CHAR):          Tb_rule.decl.value[0],
     
-    ('type', Tag.KW_CHAR):          Tb_rule.type.value[0],
-    ('type', Tag.KW_CHAR):          Tb_rule.type.value[1],
+    ('_type', Tag.KW_CHAR):         Tb_rule._type.value[0],
+    ('_type', Tag.KW_CHAR):         Tb_rule._type.value[1],
     
     ('id_list', Tag.ID):            Tb_rule.id_list.value[0],
     ('id_list_', Tag.SMB_COM):      Tb_rule.id_list_.value[0],
@@ -178,5 +178,3 @@ TB={
     ('constant', Tag.NUM):          Tb_rule.constant.value[0],
     ('constant', Tag.CHAR):         Tb_rule.constant.value[0]
 }
-
-print(TB['relop', Tag.OP_NE])
