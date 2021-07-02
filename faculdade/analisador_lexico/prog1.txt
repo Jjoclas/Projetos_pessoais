@@ -1,12 +1,12 @@
-var := 50
+var = 50
 if (var < 100){
    read "asd"
 }
 else{ 
    1 <= ola
    1/2
-   1-2
+   11.3-2
    1+2
-   1*2
+   1*2.2
 }
    program 100 /* teste //ksdjfklasdjf */ 

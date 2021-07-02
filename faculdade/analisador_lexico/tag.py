@@ -33,7 +33,7 @@ class Tag(Enum):
    OP_MIN = '-'
    OP_MUL = '*'
    OP_DIV = '/'
-   OP_ATRIB = ':='
+   OP_ATRIB = '='
    
    # Simbolos
    SMB_OBC = '{'
@@ -48,6 +48,15 @@ class Tag(Enum):
 
    # Numeros
    NUM = auto()
+   # Strings
+   CHAR = auto()
+
+   # Constantes para tipos
+   TIPO_VOID = auto()
+   TIPO_BOOL = auto()
+   TIPO_NUM =  auto()
+   TIPO_CHAR = auto()
+   TIPO_ERRO = auto()
 
 
 
