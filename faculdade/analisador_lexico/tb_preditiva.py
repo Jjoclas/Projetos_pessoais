@@ -49,131 +49,131 @@ TB={
     ('decl_list', Tag.KW_CHAR):     Tb_rule.decl_list.value[0], # 3
     ('decl_list', Tag.SMB_OBC):     Tb_rule.decl_list.value[1], # 4
     
-    ('decl', Tag.KW_NUM):           Tb_rule.decl.value[0],
-    ('decl', Tag.KW_CHAR):          Tb_rule.decl.value[0],
+    ('decl', Tag.KW_NUM):           Tb_rule.decl.value[0], # 5
+    ('decl', Tag.KW_CHAR):          Tb_rule.decl.value[0], # 5
     
-    ('_type', Tag.KW_NUM):          Tb_rule._type.value[0],
-    ('_type', Tag.KW_CHAR):         Tb_rule._type.value[1],
+    ('_type', Tag.KW_NUM):          Tb_rule._type.value[0], # 6
+    ('_type', Tag.KW_CHAR):         Tb_rule._type.value[1], # 7
     
-    ('id_list', Tag.ID):            Tb_rule.id_list.value[0],
-    ('id_list_', Tag.SMB_COM):      Tb_rule.id_list_.value[0],
-    ('id_list_', Tag.SMB_SEM):      Tb_rule.id_list_.value[1],
+    ('id_list', Tag.ID):            Tb_rule.id_list.value[0], # 8
+    ('id_list_', Tag.SMB_COM):      Tb_rule.id_list_.value[0], # 9
+    ('id_list_', Tag.SMB_SEM):      Tb_rule.id_list_.value[1], # 10
     
-    ('stmt_list', Tag.ID):          Tb_rule.stmt_list.value[0],
-    ('stmt_list', Tag.KW_IF):       Tb_rule.stmt_list.value[0],
-    ('stmt_list', Tag.KW_WRITE):    Tb_rule.stmt_list.value[0],
-    ('stmt_list', Tag.KW_READ):     Tb_rule.stmt_list.value[0],
-    ('stmt_list', Tag.KW_WHILE):    Tb_rule.stmt_list.value[0],
-    ('stmt_list', Tag.SMB_CBC):     Tb_rule.stmt_list.value[1],
+    ('stmt_list', Tag.ID):          Tb_rule.stmt_list.value[0], # 11
+    ('stmt_list', Tag.KW_IF):       Tb_rule.stmt_list.value[0], # 11
+    ('stmt_list', Tag.KW_WRITE):    Tb_rule.stmt_list.value[0], # 11
+    ('stmt_list', Tag.KW_READ):     Tb_rule.stmt_list.value[0], # 11
+    ('stmt_list', Tag.KW_WHILE):    Tb_rule.stmt_list.value[0], # 11
+    ('stmt_list', Tag.SMB_CBC):     Tb_rule.stmt_list.value[1], # 12
     
-    ('stmt', Tag.ID):               Tb_rule.stmt.value[0],
-    ('stmt', Tag.KW_IF):            Tb_rule.stmt.value[1],
-    ('stmt', Tag.KW_WHILE):         Tb_rule.stmt.value[2],
-    ('stmt', Tag.KW_READ):          Tb_rule.stmt.value[3],
-    ('stmt', Tag.KW_WRITE):         Tb_rule.stmt.value[4],
+    ('stmt', Tag.ID):               Tb_rule.stmt.value[0], # 13
+    ('stmt', Tag.KW_IF):            Tb_rule.stmt.value[1], # 14
+    ('stmt', Tag.KW_WHILE):         Tb_rule.stmt.value[2], # 15
+    ('stmt', Tag.KW_READ):          Tb_rule.stmt.value[3], # 16
+    ('stmt', Tag.KW_WRITE):         Tb_rule.stmt.value[4], # 17
     
-    ('assign_stmt', Tag.ID):        Tb_rule.assign_stmt.value[0],
-    ('if_stmt', Tag.KW_IF):         Tb_rule.if_stmt.value[0],
-    ('if_stmt_', Tag.KW_ELSE):      Tb_rule.if_stmt_.value[0],
-    ('if_stmt_', Tag.SMB_SEM):      Tb_rule.if_stmt_.value[1],
-    ('while_stmt', Tag.KW_WHILE):   Tb_rule.while_stmt.value[0],
-    ('stmt_prefix', Tag.KW_WHILE):  Tb_rule.stmt_prefix.value[0],
-    ('read_stmt', Tag.KW_READ):     Tb_rule.read_stmt.value[0],
-    ('write_stmt', Tag.KW_WRITE):   Tb_rule.write_stmt.value[0],
+    ('assign_stmt', Tag.ID):        Tb_rule.assign_stmt.value[0], # 18
+    ('if_stmt', Tag.KW_IF):         Tb_rule.if_stmt.value[0], # 19
+    ('if_stmt_', Tag.KW_ELSE):      Tb_rule.if_stmt_.value[0], # 20
+    ('if_stmt_', Tag.SMB_SEM):      Tb_rule.if_stmt_.value[1], # 21
+    ('while_stmt', Tag.KW_WHILE):   Tb_rule.while_stmt.value[0], # 22
+    ('stmt_prefix', Tag.KW_WHILE):  Tb_rule.stmt_prefix.value[0], # 23
+    ('read_stmt', Tag.KW_READ):     Tb_rule.read_stmt.value[0], # 24
+    ('write_stmt', Tag.KW_WRITE):   Tb_rule.write_stmt.value[0], # 25
 
-    ('expression', Tag.ID):         Tb_rule.expression.value[0],
-    ('expression', Tag.SMB_OPA):    Tb_rule.expression.value[0],
-    ('expression', Tag.KW_NOT):     Tb_rule.expression.value[0],
-    ('expression', Tag.NUM):        Tb_rule.expression.value[0],
-    ('expression', Tag.CHAR):       Tb_rule.expression.value[0],
-    ('expression_', Tag.KW_AND):    Tb_rule.expression_.value[0],
-    ('expression_', Tag.KW_OR):     Tb_rule.expression_.value[0],
-    ('expression_', Tag.SMB_CPA):   Tb_rule.expression_.value[1],
+    ('expression', Tag.ID):         Tb_rule.expression.value[0], # 26
+    ('expression', Tag.SMB_OPA):    Tb_rule.expression.value[0], # 26
+    ('expression', Tag.KW_NOT):     Tb_rule.expression.value[0], # 26
+    ('expression', Tag.NUM):        Tb_rule.expression.value[0], # 26
+    ('expression', Tag.CHAR):       Tb_rule.expression.value[0], # 26
+    ('expression_', Tag.KW_AND):    Tb_rule.expression_.value[0], # 27
+    ('expression_', Tag.KW_OR):     Tb_rule.expression_.value[0], # 27
+    ('expression_', Tag.SMB_CPA):   Tb_rule.expression_.value[1], # 28
 
-    ('simple_expr', Tag.ID):        Tb_rule.simple_expr.value[0],
-    ('simple_expr', Tag.SMB_OPA):   Tb_rule.simple_expr.value[0],
-    ('simple_expr', Tag.KW_NOT):    Tb_rule.simple_expr.value[0],
-    ('simple_expr', Tag.NUM):       Tb_rule.simple_expr.value[0],
-    ('simple_expr', Tag.CHAR):      Tb_rule.simple_expr.value[0],
+    ('simple_expr', Tag.ID):        Tb_rule.simple_expr.value[0], # 29
+    ('simple_expr', Tag.SMB_OPA):   Tb_rule.simple_expr.value[0], # 29
+    ('simple_expr', Tag.KW_NOT):    Tb_rule.simple_expr.value[0], # 29
+    ('simple_expr', Tag.NUM):       Tb_rule.simple_expr.value[0], # 29
+    ('simple_expr', Tag.CHAR):      Tb_rule.simple_expr.value[0], # 29
     
-    ('simple_expr_', Tag.OP_LE):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.OP_GE):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.OP_LT):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.OP_GT):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.OP_EQ):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.OP_NE):    Tb_rule.simple_expr_.value[0],
-    ('simple_expr_', Tag.SMB_SEM):  Tb_rule.simple_expr_.value[1],
-    ('simple_expr_', Tag.SMB_CPA):  Tb_rule.simple_expr_.value[1],
-    ('simple_expr_', Tag.KW_AND):   Tb_rule.simple_expr_.value[1],
-    ('simple_expr_', Tag.KW_OR):    Tb_rule.simple_expr_.value[1],
+    ('simple_expr_', Tag.OP_LE):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.OP_GE):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.OP_LT):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.OP_GT):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.OP_EQ):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.OP_NE):    Tb_rule.simple_expr_.value[0], # 30
+    ('simple_expr_', Tag.SMB_SEM):  Tb_rule.simple_expr_.value[1], # 31
+    ('simple_expr_', Tag.SMB_CPA):  Tb_rule.simple_expr_.value[1], # 31
+    ('simple_expr_', Tag.KW_AND):   Tb_rule.simple_expr_.value[1], # 31
+    ('simple_expr_', Tag.KW_OR):    Tb_rule.simple_expr_.value[1], # 31
 
-    ('term', Tag.ID):               Tb_rule.term.value[0],
-    ('term', Tag.SMB_OPA):          Tb_rule.term.value[0],
-    ('term', Tag.KW_NOT):           Tb_rule.term.value[0],
-    ('term', Tag.NUM):              Tb_rule.term.value[0],
-    ('term', Tag.CHAR):             Tb_rule.term.value[0],
+    ('term', Tag.ID):               Tb_rule.term.value[0], # 32
+    ('term', Tag.SMB_OPA):          Tb_rule.term.value[0], # 32
+    ('term', Tag.KW_NOT):           Tb_rule.term.value[0], # 32
+    ('term', Tag.NUM):              Tb_rule.term.value[0], # 32
+    ('term', Tag.CHAR):             Tb_rule.term.value[0], # 32
 
-    ('term_', Tag.OP_AD):           Tb_rule.term_.value[0],
-    ('term_', Tag.OP_MIN):          Tb_rule.term_.value[0],
-    ('term_', Tag.SMB_SEM):         Tb_rule.term_.value[1],
-    ('term_', Tag.SMB_CPA):         Tb_rule.term_.value[1],
-    ('term_', Tag.KW_AND):          Tb_rule.term_.value[1],
-    ('term_', Tag.KW_OR):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_LE):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_GE):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_LT):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_GT):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_EQ):           Tb_rule.term_.value[1],
-    ('term_', Tag.OP_NE):           Tb_rule.term_.value[1],
+    ('term_', Tag.OP_AD):           Tb_rule.term_.value[0], # 33
+    ('term_', Tag.OP_MIN):          Tb_rule.term_.value[0], # 33
+    ('term_', Tag.SMB_SEM):         Tb_rule.term_.value[1], # 34
+    ('term_', Tag.SMB_CPA):         Tb_rule.term_.value[1], # 34
+    ('term_', Tag.KW_AND):          Tb_rule.term_.value[1], # 34
+    ('term_', Tag.KW_OR):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_LE):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_GE):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_LT):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_GT):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_EQ):           Tb_rule.term_.value[1], # 34
+    ('term_', Tag.OP_NE):           Tb_rule.term_.value[1], # 34
 
-    ('factor_b', Tag.ID):           Tb_rule.factor_b.value[0],
-    ('factor_b', Tag.SMB_OPA):      Tb_rule.factor_b.value[0],
-    ('factor_b', Tag.KW_NOT):       Tb_rule.factor_b.value[0],
-    ('factor_b', Tag.NUM):          Tb_rule.factor_b.value[0],
-    ('factor_b', Tag.CHAR):         Tb_rule.factor_b.value[0],
+    ('factor_b', Tag.ID):           Tb_rule.factor_b.value[0], # 35
+    ('factor_b', Tag.SMB_OPA):      Tb_rule.factor_b.value[0], # 35
+    ('factor_b', Tag.KW_NOT):       Tb_rule.factor_b.value[0], # 35
+    ('factor_b', Tag.NUM):          Tb_rule.factor_b.value[0], # 35
+    ('factor_b', Tag.CHAR):         Tb_rule.factor_b.value[0], # 35
 
-    ('factor_b_', Tag.OP_MUL):      Tb_rule.factor_b_.value[0],
-    ('factor_b_', Tag.OP_DIV):      Tb_rule.factor_b_.value[0],
-    ('factor_b_', Tag.OP_AD):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_MIN):      Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.SMB_SEM):     Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.SMB_CPA):     Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.KW_AND):      Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.KW_OR):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_LE):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_GE):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_LT):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_GT):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_EQ):       Tb_rule.factor_b_.value[1],
-    ('factor_b_', Tag.OP_NE):       Tb_rule.factor_b_.value[1],
+    ('factor_b_', Tag.OP_MUL):      Tb_rule.factor_b_.value[0], # 36
+    ('factor_b_', Tag.OP_DIV):      Tb_rule.factor_b_.value[0], # 36
+    ('factor_b_', Tag.OP_AD):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_MIN):      Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.SMB_SEM):     Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.SMB_CPA):     Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.KW_AND):      Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.KW_OR):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_LE):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_GE):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_LT):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_GT):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_EQ):       Tb_rule.factor_b_.value[1], # 37
+    ('factor_b_', Tag.OP_NE):       Tb_rule.factor_b_.value[1], # 37
 
-    ('factor_a', Tag.ID):           Tb_rule.factor_a.value[0],
-    ('factor_a', Tag.SMB_OPA):      Tb_rule.factor_a.value[0],
-    ('factor_a', Tag.NUM):          Tb_rule.factor_a.value[0],
-    ('factor_a', Tag.CHAR):         Tb_rule.factor_a.value[0],
-    ('factor_a', Tag.KW_NOT):       Tb_rule.factor_a.value[1],
+    ('factor_a', Tag.ID):           Tb_rule.factor_a.value[0], # 38
+    ('factor_a', Tag.SMB_OPA):      Tb_rule.factor_a.value[0], # 38
+    ('factor_a', Tag.NUM):          Tb_rule.factor_a.value[0], # 38
+    ('factor_a', Tag.CHAR):         Tb_rule.factor_a.value[0], # 38
+    ('factor_a', Tag.KW_NOT):       Tb_rule.factor_a.value[1], # 39
 
-    ('factor', Tag.ID):             Tb_rule.factor.value[0],
-    ('factor', Tag.NUM):            Tb_rule.factor.value[1],
-    ('factor', Tag.CHAR):           Tb_rule.factor.value[1],
-    ('factor', Tag.SMB_OPA):        Tb_rule.factor.value[2],
+    ('factor', Tag.ID):             Tb_rule.factor.value[0], # 40
+    ('factor', Tag.NUM):            Tb_rule.factor.value[1], # 41
+    ('factor', Tag.CHAR):           Tb_rule.factor.value[1], # 41
+    ('factor', Tag.SMB_OPA):        Tb_rule.factor.value[2], # 42
 
-    ('logop', Tag.KW_OR):           Tb_rule.logop.value[0],
-    ('logop', Tag.KW_AND):          Tb_rule.logop.value[1],
+    ('logop', Tag.KW_OR):           Tb_rule.logop.value[0], # 43
+    ('logop', Tag.KW_AND):          Tb_rule.logop.value[1], # 44
 
-    ('relop', Tag.OP_EQ):           Tb_rule.relop.value[0],
-    ('relop', Tag.OP_GT):           Tb_rule.relop.value[1],
-    ('relop', Tag.OP_GE):           Tb_rule.relop.value[2],
-    ('relop', Tag.OP_LT):           Tb_rule.relop.value[3],
-    ('relop', Tag.OP_LE):           Tb_rule.relop.value[4],
-    ('relop', Tag.OP_NE):           Tb_rule.relop.value[5],
+    ('relop', Tag.OP_EQ):           Tb_rule.relop.value[0], # 45
+    ('relop', Tag.OP_GT):           Tb_rule.relop.value[1], # 46
+    ('relop', Tag.OP_GE):           Tb_rule.relop.value[2], # 47
+    ('relop', Tag.OP_LT):           Tb_rule.relop.value[3], # 48
+    ('relop', Tag.OP_LE):           Tb_rule.relop.value[4], # 49
+    ('relop', Tag.OP_NE):           Tb_rule.relop.value[5], # 50
 
-    ('addop', Tag.OP_MIN):          Tb_rule.addop.value[0],
-    ('addop', Tag.OP_AD):           Tb_rule.addop.value[1],
+    ('addop', Tag.OP_MIN):          Tb_rule.addop.value[0], # 51
+    ('addop', Tag.OP_AD):           Tb_rule.addop.value[1], # 52
 
-    ('mulop', Tag.OP_MUL):          Tb_rule.mulop.value[0],
-    ('mulop', Tag.OP_DIV):          Tb_rule.mulop.value[1],
+    ('mulop', Tag.OP_MUL):          Tb_rule.mulop.value[0], # 53
+    ('mulop', Tag.OP_DIV):          Tb_rule.mulop.value[1], # 54
 
-    ('constant', Tag.NUM):          Tb_rule.constant.value[0],
-    ('constant', Tag.CHAR):         Tb_rule.constant.value[1]
+    ('constant', Tag.NUM):          Tb_rule.constant.value[0], # 55
+    ('constant', Tag.CHAR):         Tb_rule.constant.value[1] # 56
 }
