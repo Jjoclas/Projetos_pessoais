@@ -1,7 +1,9 @@
 program prog
+char var;
  {
+    var = "A";
+   /* write 1.22 / 1;
     read ola;
-    write 1.22 / 1;
     if (var1 == 1){
         var = 2;
     }else{
@@ -12,5 +14,5 @@ program prog
         var = 1;
     };
     
-    
+    */
 }

@@ -1,6 +1,5 @@
 import sys
 import logging
-from token_pasc import Token
 from tag import Tag
 from tb_preditiva import TB
 
@@ -19,6 +18,7 @@ class Parser():
 
 		print("[Erro Semantico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
 		print(message, "\n")
+		sys.exit(0)
 
 
 	def sinalizaErroSintatico(self, message):
@@ -73,20 +73,46 @@ class Parser():
 		self.pilha.extend(list_simbolo)
 
 	def le_pilha(self):
-		list_lido = []
 		while self.pilha:
 			simbolo = self.pilha[-1]
-			list_lido.append(self.token.lexema)
+
 			if self.isToken(simbolo):
 				if simbolo == self.token.tag:
 					self.desempilha()
 					self.advance()
 					continue
+	
 				self.sinalizaErroSintatico(f'Esperado: {simbolo}, recebido: {self.token.lexema}')			
 			else:
+				if simbolo.startswith('func'):
+					getattr(self, simbolo)()
+					self.desempilha()
+					simbolo = self.pilha[-1]
+
 				if TB.get((simbolo, self.token.tag), 'N\A') != 'N\A':
 					self.empilha(TB.get((simbolo, self.token.tag)))
 					continue
+	
 				self.sinalizaErroSintatico(self.msg_simbolos_esperados(simbolo) + self.token.lexema)			
 
     
+	def func_avalia_declaracao(self):
+		if self.token.tipo == Tag.TIPO_VOID:
+			self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não declarada.')
+
+	def func_avalia_tipo(self):
+		token_anterior = self.lexer.list_tokens[-3]
+		if self.token.tipo != token_anterior: #Valia tipo do ultimo token com o antepenultimo
+			self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não compativel com tipo {token_anterior.tipo}.')
+	
+	def func_add_tipo(self):
+		token_anterior = self.lexer.list_tokens[-3]
+		if self.token.tipo == Tag.TIPO_VOID or self.token.tipo == token_anterior.tipo:
+			token_anterior.tipo = self.token.tipo
+
+		self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não compativel com tipo {token_anterior.tipo}.')
+
+	def func_add_tipo_decl(self):
+		print([ token.tag for token in self.lexer.list_tokens])
+		self.lexer.list_tokens[-1].tipo = self.lexer.list_tokens[-2].tipo
+		self.token.tipo = self.lexer.list_tokens[-2].tipo

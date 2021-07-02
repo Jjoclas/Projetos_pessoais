@@ -1,4 +1,3 @@
-import enum
 from tag import Tag
 from enum import Enum
 
@@ -6,19 +5,19 @@ class Tb_rule(Enum):
     prog =          [[Tag.KW_PROGRAM, Tag.ID, 'body' ]] # 1
     body =          [['decl_list', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]] # 2
     decl_list =     [['decl', Tag.SMB_SEM, 'decl_list'], []] # 3, 4
-    decl =          [['_type', Tag.SMB_SEM, 'decl_list'], []] # 5
+    decl =          [['_type', "func_add_tipo_decl", 'id_list'], []] # 5
     _type =         [[Tag.KW_NUM], [Tag.KW_CHAR]] # 6, 7
     id_list =       [[Tag.ID, 'id_list_']] # 8
     id_list_ =      [[Tag.SMB_COM, 'id_list'], []] # 9, 10
 
     stmt_list =     [['stmt', Tag.SMB_SEM, 'stmt_list'], []] # 11, 12
     stmt =          [['assign_stmt'], ['if_stmt'], ['while_stmt'], ['read_stmt'], ['write_stmt']] # 13, 14, 15, 16, 17
-    assign_stmt =   [[Tag.ID, Tag.OP_ATRIB, 'simple_expr']] # 18
+    assign_stmt =   [[Tag.ID, Tag.OP_ATRIB, "func_add_tipo", 'simple_expr']] # 18
     if_stmt =       [[Tag.KW_IF, Tag.SMB_OPA, 'expression', Tag.SMB_CPA, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC, 'if_stmt_' ]] # 19
     if_stmt_ =      [[Tag.KW_ELSE, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC ], []] # 20, 21
     while_stmt =    [['stmt_prefix', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]] # 22
     stmt_prefix =   [[Tag.KW_WHILE, Tag.SMB_OPA, 'expression', Tag.SMB_CPA]] # 23
-    read_stmt =     [[Tag.KW_READ, Tag.ID]] # 24
+    read_stmt =     [[Tag.KW_READ, "func_avalia_declaracao", Tag.ID]] # 24
     write_stmt =    [[Tag.KW_WRITE, 'simple_expr']] # 25
 
     expression =    [['simple_expr', 'expression_']] # 26
@@ -26,7 +25,7 @@ class Tb_rule(Enum):
     simple_expr =   [('term', 'simple_expr_')] # 29
     simple_expr_ =  [['relop', 'term', 'simple_expr_'], []] # 30, 31
     term =          [['factor_b', 'term_']] # 32
-    term_ =         [['addop', 'factor_b', 'term_'], []] # 33, 34
+    term_ =         [['addop', "func_avalia_tipo", 'factor_b', 'term_'], []] # 33, 34
     factor_b =      [['factor_a', 'factor_b_']] # 35
     factor_b_ =     [['mulop', 'factor_a', 'factor_b_'], []] # 36, 37
     factor_a =      [['factor'], [Tag.KW_NOT, 'factor']] # 38, 39
@@ -168,8 +167,8 @@ TB={
     ('relop', Tag.OP_LE):           Tb_rule.relop.value[4], # 49
     ('relop', Tag.OP_NE):           Tb_rule.relop.value[5], # 50
 
-    ('addop', Tag.OP_MIN):          Tb_rule.addop.value[0], # 51
-    ('addop', Tag.OP_AD):           Tb_rule.addop.value[1], # 52
+    ('addop', Tag.OP_AD):           Tb_rule.addop.value[0], # 51
+    ('addop', Tag.OP_MIN):          Tb_rule.addop.value[1], # 52
 
     ('mulop', Tag.OP_MUL):          Tb_rule.mulop.value[0], # 53
     ('mulop', Tag.OP_DIV):          Tb_rule.mulop.value[1], # 54
