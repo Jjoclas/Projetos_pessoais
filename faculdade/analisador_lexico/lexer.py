@@ -206,10 +206,10 @@ class Lexer():
                   if not self._lexema:
                      self.sinalizaErroLexico("Strings vazias não são validas")
                      continue
-                  
+                  print(self._lexema)
                   self.list_tokens.append(Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer))
-                  self._limpa_lexema()
                   yield Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer)
+                  self._limpa_lexema()
                   continue
                
                self._lexema += self._simbolo
@@ -219,10 +219,10 @@ class Lexer():
                continue
             
             if self._estado == 18:
-               if self._simbolo not in ['/', '*']:
+               if self._simbolo not in ['/', '*'] and not self._lexema.startswith('//'):
                   self.list_tokens.append(Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer))
-                  self._limpa_lexema()
                   yield Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer)
+                  self._limpa_lexema()
                   continue
 
                self._lexema += self._simbolo

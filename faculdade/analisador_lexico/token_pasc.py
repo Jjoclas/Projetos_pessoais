@@ -10,6 +10,10 @@ class Token:
       self.linha = linha
       self.coluna = coluna
       self.tipo = tipo
+      if tag == Tag.CHAR:
+         self.tipo = Tag.TIPO_CHAR
+      if tag == Tag.NUM:
+         self.tipo = Tag.TIPO_NUM
 
    def getNome(self):
       return self.nome

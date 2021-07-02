@@ -54,7 +54,6 @@ class Parser():
 
 
 	def isToken(self, simbolo):
-		# print('ISTOKEN', simbolo, '\n\n')
 		if isinstance(simbolo, str):
 			return False
 		
@@ -65,35 +64,27 @@ class Parser():
 		self.pilha.pop(-1)
 
 
-	def empilha(self, list_simbolo):
-		print(list_simbolo)
+	def empilha(self, tpl_simbolo):
 		self.desempilha()
-		list_simbolo = list(list_simbolo)
+		list_simbolo = list(tpl_simbolo)
 		list_simbolo.reverse()
-		print(list_simbolo)
-		print('print\n\n')
 		self.pilha.extend(list_simbolo)
 
 	def le_pilha(self):
+		list_lido = []
 		while self.pilha:
 			simbolo = self.pilha[-1]
-			# print('\npilha',self.pilha)
-			# print('TOKEN', self.token.tag , '\n\n')
-
+			list_lido.append(self.token.lexema)
 			if self.isToken(simbolo):
 				if simbolo == self.token.tag:
 					self.desempilha()
 					self.advance()
 					continue
-				# print('ISTOKEN ERROR')
 				self.sinalizaErroSintatico(f'Esperado: {simbolo}, recebido: {self.token.lexema}')			
 			else:
-				print('TOKEN', self.token.tag )
-				print(f'\nTB\nToken: {self.token.tag}\nSimbolo: {simbolo}\n', TB.get((simbolo, self.token.tag), 'N\A'))
 				if TB.get((simbolo, self.token.tag), 'N\A') != 'N\A':
-					self.empilha(TB[simbolo, self.token.tag])
+					self.empilha(TB.get((simbolo, self.token.tag)))
 					continue
-				
 				self.sinalizaErroSintatico(self.msg_simbolos_esperados(simbolo) + self.token.lexema)			
 
     

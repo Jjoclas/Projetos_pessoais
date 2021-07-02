@@ -175,5 +175,5 @@ TB={
     ('mulop', Tag.OP_DIV):          Tb_rule.mulop.value[1],
 
     ('constant', Tag.NUM):          Tb_rule.constant.value[0],
-    ('constant', Tag.CHAR):         Tb_rule.constant.value[0]
+    ('constant', Tag.CHAR):         Tb_rule.constant.value[1]
 }
