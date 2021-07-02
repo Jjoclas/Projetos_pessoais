@@ -23,10 +23,12 @@ class Parser():
 
 	def sinalizaErroSintatico(self, message):
 		print("[Erro Sintatico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
+		self.token.tipo = Tag.TIPO_ERRO
+		print("[DEBUG] token: ", self.token.toString())
 		print(message, "\n")
 
 		self._qtd_erros_sintatico += 1
-		if self._qtd_erros_sintatico > 0:
+		if self._qtd_erros_sintatico > 5:
 			logging.critical('Limite máximo de erros sintaticos suportados foi atingido.')
 			sys.exit(0)
 		self.advance()
