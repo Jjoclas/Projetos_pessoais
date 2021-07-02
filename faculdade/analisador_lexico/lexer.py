@@ -36,8 +36,6 @@ class Lexer():
          self.list_tokens: list = []
          self._line_atual = 1
          self._column_atual = 1
-         self._line_lexer = 1
-         self._column_lexer = 1
          self.ts = TS()
       except IOError:
          print('Erro de abertura do arquivo. Encerrando.')
@@ -64,6 +62,7 @@ class Lexer():
       self._checa_modo_panico()
 
    def retornaPonteiro(self):
+      self._column_atual -= 1
       self._input_file.seek(self._input_file.tell()-1)
 
 
@@ -81,15 +80,10 @@ class Lexer():
       self._lexema = ''
       self._estado = 1
 
-   def _atualiza_linha_lexer(self):
-      self._line_lexer = self._line_atual
-      self._column_lexer = self._column_atual
-
    def _le_arquivo(self) -> Generator:
       while True:
          try:
             self._simbolo: str = self._input_file.read(1).decode('ascii')
-            
             # Sinaliza coluna e linha
             self._column_atual += 1
             if self._simbolo == '\n':
@@ -114,8 +108,7 @@ class Lexer():
             
             
             if self._estado == 1:
-               self._atualiza_linha_lexer()
-               
+
                list_simbolos: list = [ smb.value for smb in self.ts.get_SMB()]
                list_operadores: list = [ smb.value for smb in self.ts.get_OP()]
                list_tokens: list = list_operadores + list_simbolos
@@ -180,12 +173,12 @@ class Lexer():
             if self._estado == 2:
                self._limpa_lexema()
                if self._simbolo == '=':
-                  self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_atual, self._column_atual))
+                  yield Token(Tag.OP_EQ, Tag.OP_EQ.value, self._line_atual, self._column_atual)
                   continue
 
-               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer))
-               yield Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_lexer, self._column_lexer)
+               self.list_tokens.append(Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_atual, self._column_atual))
+               yield Token(Tag.OP_ATRIB, Tag.OP_ATRIB.value, self._line_atual, self._column_atual)
                self.retornaPonteiro()
                continue
                   
@@ -193,8 +186,8 @@ class Lexer():
             if self._estado == 4:
                self._limpa_lexema()
                if self._simbolo == '=':
-                  self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.OP_NE, Tag.OP_NE.value, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.OP_NE, Tag.OP_NE.value, self._line_atual, self._column_atual))
+                  yield Token(Tag.OP_NE, Tag.OP_NE.value, self._line_atual, self._column_atual)
                   continue
 
                self.sinalizaErroLexico()
@@ -207,8 +200,8 @@ class Lexer():
                      self.sinalizaErroLexico("Strings vazias não são validas")
                      continue
                   print(self._lexema)
-                  self.list_tokens.append(Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.CHAR, self._lexema, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.CHAR, self._lexema, self._line_atual, self._column_atual))
+                  yield Token(Tag.CHAR, self._lexema, self._line_atual, self._column_atual)
                   self._limpa_lexema()
                   continue
                
@@ -220,8 +213,8 @@ class Lexer():
             
             if self._estado == 18:
                if self._simbolo not in ['/', '*'] and not self._lexema.startswith('//'):
-                  self.list_tokens.append(Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.OP_DIV, self._lexema, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.OP_DIV, self._lexema, self._line_atual, self._column_atual))
+                  yield Token(Tag.OP_DIV, self._lexema, self._line_atual, self._column_atual)
                   self._limpa_lexema()
                   continue
 
@@ -254,25 +247,25 @@ class Lexer():
             if self._estado == 6:
                self._limpa_lexema()
                if self._simbolo == '=':
-                  self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.OP_LE, Tag.OP_LE.value, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.OP_LE, Tag.OP_LE.value, self._line_atual, self._column_atual))
+                  yield Token(Tag.OP_LE, Tag.OP_LE.value, self._line_atual, self._column_atual)
                   continue
 
                self.retornaPonteiro()
-               self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer))
-               yield Token(Tag.OP_LT, Tag.OP_LT.value, self._line_lexer, self._column_lexer)
+               self.list_tokens.append(Token(Tag.OP_LT, Tag.OP_LT.value, self._line_atual, self._column_atual))
+               yield Token(Tag.OP_LT, Tag.OP_LT.value, self._line_atual, self._column_atual)
                continue
 
             if self._estado == 9:
                self._limpa_lexema()
                if self._simbolo == '=':
-                  self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer))
-                  yield Token(Tag.OP_GE, Tag.OP_GE.value, self._line_lexer, self._column_lexer)
+                  self.list_tokens.append(Token(Tag.OP_GE, Tag.OP_GE.value, self._line_atual, self._column_atual))
+                  yield Token(Tag.OP_GE, Tag.OP_GE.value, self._line_atual, self._column_atual)
                   continue
 
                self.retornaPonteiro()
-               self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer))
-               yield Token(Tag.OP_GT, Tag.OP_GT.value, self._line_lexer, self._column_lexer)
+               self.list_tokens.append(Token(Tag.OP_GT, Tag.OP_GT.value, self._line_atual, self._column_atual))
+               yield Token(Tag.OP_GT, Tag.OP_GT.value, self._line_atual, self._column_atual)
                continue
             
             if self._estado == 12:
@@ -285,8 +278,8 @@ class Lexer():
                   continue
                
                self.retornaPonteiro()
-               self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer))
-               yield Token(Tag.NUM, self._lexema, self._line_lexer, self._column_lexer)
+               self.list_tokens.append(Token(Tag.NUM, self._lexema, self._line_atual, self._column_atual))
+               yield Token(Tag.NUM, self._lexema, self._line_atual, self._column_atual)
                self._limpa_lexema()
 
             if self._estado == 14:
@@ -297,9 +290,9 @@ class Lexer():
                token = self.ts.getToken(self._lexema)
                
                if token:
-                  token = Token(token.tag, token.lexema, self._line_lexer, self._column_lexer)
+                  token = Token(token.tag, token.lexema, self._line_atual, self._column_atual)
                else:
-                  token = Token(Tag.ID, self._lexema, self._line_lexer, self._column_lexer)
+                  token = Token(Tag.ID, self._lexema, self._line_atual, self._column_atual)
                
                self.list_tokens.append(token)
                yield token
