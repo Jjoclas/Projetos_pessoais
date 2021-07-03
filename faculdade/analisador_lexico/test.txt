@@ -1,7 +1,7 @@
 program prog
 char var;
  {
-    var = "A";
+    var =  "1" + ola;
    /* write 1.22 / 1;
     read ola;
     if (var1 == 1){

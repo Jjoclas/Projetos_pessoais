@@ -302,15 +302,14 @@ class Lexer():
                   continue
 
                token = self.ts.getToken(self._lexema)
-               
                if token:
-                  token = Token(token.tag, token.lexema, self._line_atual, self._column_atual)
+                  token = Token(token.tag, token.lexema, self._line_atual, self._column_atual, token.tipo)
                else:
                   token = Token(Tag.ID, self._lexema, self._line_atual, self._column_atual)
+                  self.ts.addToken(self._lexema, token)
                
                self.list_tokens.append(token)
                yield token
-               self.ts.addToken(self._lexema, token)
 
                self._limpa_lexema()
                self.retornaPonteiro()            

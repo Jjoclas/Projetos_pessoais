@@ -4,7 +4,7 @@ from _parser import Parser
 
 if __name__ == "__main__":
    #Lê arquivo
-   lexer = Lexer('test.txt')
+   lexer = Lexer('teste.pasc')
    parser = Parser(lexer)
    parser.le_pilha()
 

@@ -96,23 +96,38 @@ class Parser():
 				self.sinalizaErroSintatico(self.msg_simbolos_esperados(simbolo) + self.token.lexema)			
 
     
-	def func_avalia_declaracao(self):
-		if self.token.tipo == Tag.TIPO_VOID:
-			self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não declarada.')
+	def func_avalia_declaracao(self, token=None):
+		if not token:
+			token = self.token  
+
+		if token.tipo == Tag.TIPO_VOID:
+			self.sinalizaErroSemantico(f'Variavel {token.lexema} não declarada.')
 
 	def func_avalia_tipo(self):
 		token_anterior = self.lexer.list_tokens[-3]
+		self.func_avalia_declaracao(token_anterior)
+		self.func_avalia_declaracao()
 		if self.token.tipo != token_anterior: #Valia tipo do ultimo token com o antepenultimo
 			self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não compativel com tipo {token_anterior.tipo}.')
 	
 	def func_add_tipo(self):
 		token_anterior = self.lexer.list_tokens[-3]
-		if self.token.tipo == Tag.TIPO_VOID or self.token.tipo == token_anterior.tipo:
-			token_anterior.tipo = self.token.tipo
+		tipo_token = self.get_token_tipo(token_anterior.lexema)
+		if tipo_token == Tag.TIPO_VOID or self.token.tipo == tipo_token:
+			self.adiciona_tipo(token_anterior.lexema, self.token.tipo)
+			return
 
-		self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não compativel com tipo {token_anterior.tipo}.')
+		self.sinalizaErroSemantico(f'Variavel {token_anterior.lexema} não compativel com tipo {self.token.tipo}.')
+
 
 	def func_add_tipo_decl(self):
-		print([ token.tag for token in self.lexer.list_tokens])
 		self.lexer.list_tokens[-1].tipo = self.lexer.list_tokens[-2].tipo
-		self.token.tipo = self.lexer.list_tokens[-2].tipo
+		self.adiciona_tipo(self.token.lexema, self.lexer.list_tokens[-2].tipo)
+
+
+	def adiciona_tipo(self, lexema, tipo):
+		self.lexer.ts.ts[lexema].tipo = tipo
+
+
+	def get_token_tipo(self, lexema):
+		return self.lexer.ts.getToken(lexema).tipo 

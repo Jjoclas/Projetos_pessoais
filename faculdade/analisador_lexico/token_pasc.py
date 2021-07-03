@@ -16,6 +16,10 @@ class Token:
       
       if tag in (Tag.NUM, Tag.KW_NUM):
          self.tipo = Tag.TIPO_NUM
+     
+      if tag in(Tag.OP_LE, Tag.OP_GE, Tag.OP_LT, 
+                  Tag.OP_GT, Tag.OP_EQ, Tag.OP_NE):
+         self.tipo = Tag.TIPO_BOOL
 
    def getNome(self):
       return self.nome
