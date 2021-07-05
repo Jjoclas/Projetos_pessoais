@@ -18,7 +18,7 @@ class Parser():
 
 		print("[Erro Semantico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
 		print(message, "\n")
-		sys.exit(0)
+		# sys.exit(0)
 
 
 	def sinalizaErroSintatico(self, message):
@@ -34,7 +34,7 @@ class Parser():
 		self.advance()
 
 	def msg_simbolos_esperados(self, simbolo):
-		tpl_smb: list = [ keys[1] for keys in self.TB.keys() if simbolo in keys ]
+		tpl_smb: list = list(set([ keys[1] for keys in self.TB.keys() if simbolo in keys ]))
 		return f'Esperado: {tpl_smb}, recebido: '
 
 	def advance(self):
@@ -75,7 +75,6 @@ class Parser():
 	def le_pilha(self):
 		while self.pilha:
 			simbolo = self.pilha[-1]
-
 			if self.isToken(simbolo):
 				if simbolo == self.token.tag:
 					self.desempilha()
@@ -87,7 +86,7 @@ class Parser():
 				if simbolo.startswith('func'):
 					getattr(self, simbolo)()
 					self.desempilha()
-					simbolo = self.pilha[-1]
+					continue
 
 				if TB.get((simbolo, self.token.tag), 'N\A') != 'N\A':
 					self.empilha(TB.get((simbolo, self.token.tag)))
@@ -107,26 +106,18 @@ class Parser():
 		token_anterior = self.lexer.list_tokens[-3]
 		self.func_avalia_declaracao(token_anterior)
 		self.func_avalia_declaracao()
-		if self.token.tipo != token_anterior: #Valia tipo do ultimo token com o antepenultimo
+
+		if self.token.tipo != token_anterior.tipo: #Valia tipo do ultimo token com o antepenultimo
 			self.sinalizaErroSemantico(f'Variavel {self.token.lexema} não compativel com tipo {token_anterior.tipo}.')
 	
-	def func_add_tipo(self):
+	
+	def func_valida_tipo(self):
 		token_anterior = self.lexer.list_tokens[-3]
+		self.func_avalia_declaracao(token_anterior)
 		tipo_token = self.get_token_tipo(token_anterior.lexema)
-		if tipo_token == Tag.TIPO_VOID or self.token.tipo == tipo_token:
-			self.adiciona_tipo(token_anterior.lexema, self.token.tipo)
-			return
 
-		self.sinalizaErroSemantico(f'Variavel {token_anterior.lexema} não compativel com tipo {self.token.tipo}.')
-
-
-	def func_add_tipo_decl(self):
-		self.lexer.list_tokens[-1].tipo = self.lexer.list_tokens[-2].tipo
-		self.adiciona_tipo(self.token.lexema, self.lexer.list_tokens[-2].tipo)
-
-
-	def adiciona_tipo(self, lexema, tipo):
-		self.lexer.ts.ts[lexema].tipo = tipo
+		if self.token.tipo != tipo_token:
+			self.sinalizaErroSemantico(f'Variavel {token_anterior.lexema} não compativel com tipo {self.token.tipo}.')
 
 
 	def get_token_tipo(self, lexema):

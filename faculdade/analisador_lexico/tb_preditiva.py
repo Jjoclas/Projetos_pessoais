@@ -5,14 +5,14 @@ class Tb_rule(Enum):
     prog =          [[Tag.KW_PROGRAM, Tag.ID, 'body' ]] # 1
     body =          [['decl_list', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]] # 2
     decl_list =     [['decl', Tag.SMB_SEM, 'decl_list'], []] # 3, 4
-    decl =          [['_type', "func_add_tipo_decl", 'id_list'], []] # 5
+    decl =          [['_type', 'id_list'], []] # 5
     _type =         [[Tag.KW_NUM], [Tag.KW_CHAR]] # 6, 7
     id_list =       [[Tag.ID, 'id_list_']] # 8
     id_list_ =      [[Tag.SMB_COM, 'id_list'], []] # 9, 10
 
     stmt_list =     [['stmt', Tag.SMB_SEM, 'stmt_list'], []] # 11, 12
     stmt =          [['assign_stmt'], ['if_stmt'], ['while_stmt'], ['read_stmt'], ['write_stmt']] # 13, 14, 15, 16, 17
-    assign_stmt =   [[Tag.ID, Tag.OP_ATRIB, "func_add_tipo", 'simple_expr']] # 18
+    assign_stmt =   [[Tag.ID, Tag.OP_ATRIB, "func_valida_tipo", 'simple_expr']] # 18
     if_stmt =       [[Tag.KW_IF, Tag.SMB_OPA, 'expression', Tag.SMB_CPA, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC, 'if_stmt_' ]] # 19
     if_stmt_ =      [[Tag.KW_ELSE, Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC ], []] # 20, 21
     while_stmt =    [['stmt_prefix', Tag.SMB_OBC, 'stmt_list', Tag.SMB_CBC]] # 22

@@ -34,6 +34,7 @@ class Lexer():
          self._estado: int = 1
          self._qtd_erros: int = 0
          self.list_tokens: list = []
+         self._tipo = Tag.TIPO_VOID
          self._line_atual = 1
          self._column_atual = 1
          self.ts = TS()
@@ -113,7 +114,10 @@ class Lexer():
                list_operadores: list = [ smb.value for smb in self.ts.get_OP()]
                list_tokens: list = list_operadores + list_simbolos
                
-               if self._simbolo in list_tokens and self._simbolo not in ('/', '<', '='):
+               if self._simbolo in list_tokens and self._simbolo not in ('/', '<', '>', '='):
+                  if self._simbolo == ';':
+                     self._tipo = Tag.TIPO_VOID
+
                   token = Token(Tag(self._simbolo), Tag(self._simbolo).value, self._line_atual, self._column_atual)
                   self.list_tokens.append(token)
                   yield token
@@ -303,9 +307,13 @@ class Lexer():
 
                token = self.ts.getToken(self._lexema)
                if token:
+                  
+                  if token.tag in (Tag.KW_CHAR,Tag.KW_NUM):
+                     self._tipo = token.tipo
+
                   token = Token(token.tag, token.lexema, self._line_atual, self._column_atual, token.tipo)
                else:
-                  token = Token(Tag.ID, self._lexema, self._line_atual, self._column_atual)
+                  token = Token(Tag.ID, self._lexema, self._line_atual, self._column_atual, self._tipo)
                   self.ts.addToken(self._lexema, token)
                
                self.list_tokens.append(token)
