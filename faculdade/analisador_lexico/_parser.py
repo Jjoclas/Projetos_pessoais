@@ -18,7 +18,7 @@ class Parser():
 
 		print("[Erro Semantico] na linha " + str(self.token.getLinha()) + " e coluna " + str(self.token.getColuna()) + ": ")
 		print(message, "\n")
-		# sys.exit(0)
+		sys.exit(0)
 
 
 	def sinalizaErroSintatico(self, message):
@@ -50,10 +50,16 @@ class Parser():
 			self.advance()
 	
 
+	'''
+	Metodos Skip e Synch não precisaram ser implementado pois o fluxo normal ja executa os procedimentos de recuperação de erros
 	def skip(self, message):
 		self.sinalizaErroSintatico(message)
 		self.advance()
 
+
+	def synch(self):
+		pass
+	'''
 
 	def isToken(self, simbolo):
 		if isinstance(simbolo, str):
