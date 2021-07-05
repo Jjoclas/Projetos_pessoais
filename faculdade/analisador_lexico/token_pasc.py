@@ -11,6 +11,16 @@ class Token:
       self.coluna = coluna
       self.tipo = tipo
 
+      if tag in (Tag.CHAR, Tag.KW_CHAR):
+         self.tipo = Tag.TIPO_CHAR
+      
+      if tag in (Tag.NUM, Tag.KW_NUM):
+         self.tipo = Tag.TIPO_NUM
+     
+      if tag in(Tag.OP_LE, Tag.OP_GE, Tag.OP_LT, 
+                  Tag.OP_GT, Tag.OP_EQ, Tag.OP_NE):
+         self.tipo = Tag.TIPO_BOOL
+
    def getNome(self):
       return self.nome
 

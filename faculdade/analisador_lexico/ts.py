@@ -9,9 +9,13 @@ class TS:
       
       self.ts = {}
       self._add_kw()
-
    def getToken(self, lexema):
+      
       token = self.ts.get(lexema)
+      
+      if token:
+         token = self.ts[lexema]
+
       return token
 
    def addToken(self, lexema, token):
