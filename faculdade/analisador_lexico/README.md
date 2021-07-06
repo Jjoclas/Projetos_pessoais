@@ -2,5 +2,5 @@
 
 ### Alunos:
 Jose Claudio dos Santos Junior: 12019049
-Isabella Dutra vieira Salgueiro: 11826958
-Mateus Costa Avelar: 11517928
+Thaís Cordeiro Pereira: 11821085
+Willian dos Santos Miranda: 119213311
